@@ -1,5 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>{{ name }}</h2>
+    <table class="table">
+        <tr> <th>#</th> <th>備品名</th>    <th>カテゴリー名</th> <th>ユーザ名</th>   <th>貸し出し状況</th></tr>
+                {% for fixtures in fixtures_list %}
+                    <tr><td>{{ fixtures.id }}</td>   <td>{{ fixtures.goods }}</td>  <td>{{ fixtures.category }}</td> <td>{{ fixtures.user }}</td>
+                    <td>
+
+                        {% if fixtures.status %}
+                            <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>貸出中
+                        {% else %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <!--<input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id}}"/>-->
+                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span><input type="submit" value="借りる"/>
+                        </form>
+                        {% endif %}
+
+                    </td>
+                    </tr>
+
+                {% endfor %}
+    </table>
 {% endblock %}

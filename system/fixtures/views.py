@@ -30,11 +30,11 @@ def home(request):
 @login_required
 def choose(request,fixtures_id):
     try:
-        fixtures = Goods.objects.get(pk=fixtures_id)
+        fixtures_list = Goods.objects.all()
     except Goods.DoesNotExist:
         raise Http404("Fixtures does not exist")
     else:
         return render(request,
                       'choose.html',
-                      {'name':fixtures}
+                      {'fixtures_list':fixtures_list}
                       )
