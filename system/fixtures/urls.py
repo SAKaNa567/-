@@ -6,5 +6,4 @@ app_name = 'fixtures'
 urlpatterns = [
     path('home/',fixtures_views.home,name='home'),
     path('<int:fixtures_id>/choose/',fixtures_views.choose,name='choose')
-
 ]
