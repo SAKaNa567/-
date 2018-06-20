@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Welcome, {{ user.username }}!</h2>
+    <form action="{% url 'fixtures:choose' 1 %}" method="post">
+      {% csrf_token %}
+      <input type="submit" value="send"/>
+    </form>
+{% endblock %}
