@@ -6,6 +6,8 @@ from django.http import Http404
 # Create your views here.
 from .models import Goods
 from django.contrib.auth.models import User
+from django.utils import timezone
+
 
 # you need this function.
 def signup(request):
@@ -48,6 +50,7 @@ def borrow(request,fixtures_id):
     else:
         fixtures.user = User.objects.get(username=request.user)
         fixtures.status = True
+        fixtures.pub_date = timezone.now()
         fixtures.save()
         return render(request,
                       'borrow.html',
@@ -63,6 +66,7 @@ def back(request,fixtures_id):
     else:
         fixtures.user = None
         fixtures.status = False
+        fixtures.pub_date = None
         fixtures.save()
         return render(request,
                       'back.html',

@@ -12,6 +12,7 @@ class Goods(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
     status = models.BooleanField(blank=True)
+    pub_date = models.DateTimeField(blank=True,null=True)
 
     def __str__(self):
         return self.goods

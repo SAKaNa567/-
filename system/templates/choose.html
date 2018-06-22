@@ -2,9 +2,10 @@
 
 {% block content %}
     <table class="table">
-        <tr> <th>#</th> <th>備品名</th>    <th>カテゴリー名</th> <th>ユーザ名</th>   <th>貸し出し状況</th></tr>
+        <tr> <th>#</th> <th>備品名</th>    <th>カテゴリー名</th> <th>ユーザ名</th>  <th>貸し出し開始時間</th> <th>貸し出し状況</th></tr>
                 {% for fixtures in fixtures_list %}
                     <tr><td>{{ fixtures.id }}</td>   <td>{{ fixtures.goods }}</td>  <td>{{ fixtures.category }}</td> <td>{{ fixtures.user }}</td>
+                        <td>{{ fixtures.pub_date }}</td>
                     <td>
 
                         {% if fixtures.status %}
