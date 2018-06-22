@@ -71,3 +71,17 @@ def back(request,fixtures_id):#other people can not return!!!
         return render(request,
                       'back.html',
                       {'fixtures_name':fixtures.goods})
+
+@login_required
+def comment(request,fixtures_id):
+    try:
+        fixtures = Goods.objects.get(pk=fixtures_id)
+    except Goods.DoesNotExist:
+        raise Http404("Goods does not exist")
+    else:
+        fixtures.comment = request.POST['comment']
+        fixtures.save()
+        return render(request,
+                      'comment.html',
+                      {'fixtures_comment':fixtures.comment}
+                      )

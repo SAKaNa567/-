@@ -13,6 +13,7 @@ class Goods(models.Model):
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
     status = models.BooleanField(blank=True)
     pub_date = models.DateTimeField(blank=True,null=True)
+    comment = models.CharField(max_length=200,blank=True,null=True)
 
     def __str__(self):
         return self.goods

@@ -2,29 +2,53 @@
 
 {% block content %}
     <table class="table">
-        <tr> <th>#</th> <th>備品名</th>    <th>カテゴリー名</th> <th>ユーザ名</th>  <th>貸し出し開始時間</th> <th>貸し出し状況</th></tr>
+        <tr> <th>#</th> <th>備品名</th>    <th>カテゴリー名</th> <th>ユーザ名</th>  <th>貸し出し開始時間</th> <th>貸し出し状況</th> <th>コメント</th></tr>
                 {% for fixtures in fixtures_list %}
-                    <tr><td>{{ fixtures.id }}</td>   <td>{{ fixtures.goods }}</td>  <td>{{ fixtures.category }}</td> <td>{{ fixtures.user }}</td>
-                        <td>{{ fixtures.pub_date }}</td>
+                    <tr><td>{{ fixtures.id }}</td>   <td>{{ fixtures.goods }}</td>  <td>{{ fixtures.category }}</td>
+                        <td>
+                            {% if fixtures.user == None %}
+                                --------
+                            {% else %}
+                                {{ fixtures.user }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if fixtures.pub_date == None %}
+                                --------
+                            {% else %}
+                                {{ fixtures.pub_date }}
+                            {% endif %}
+                        </td>
                     <td>
                         {% if fixtures.status %}
                             <!--<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>貸出中-->
                         <form action="{% url 'fixtures:back' fixtures.id %}" method="post">
                             {% csrf_token %}
                                     {% if fixtures.user == user %}
-                                        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span><input type="submit" value="返す"/>
+                                        <span class="glyphicon glyphicon-import" aria-hidden="true"></span><input class="btn btn-info" type="submit" value="返す"/>
                                     {% else %}
-                                        <p>貸し出し中</p>
+                                        <span class="glyphicon glyphicon-check">貸し出し中</span>
                                     {% endif %}
                         </form>
                         {% else %}
                         <form action="{% url 'fixtures:borrow' fixtures.id %}" method="post">
                             {% csrf_token %}
                             <!--<input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id}}"/>-->
-                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span><input type="submit" value="借りる"/>
+                            <span class="glyphicon glyphicon-export" aria-hidden="true"></span><input class="btn btn-success" type="submit" value="借りる"/>
                         </form>
                         {% endif %}
 
+                    </td>
+                    <td>
+                        {% if fixtures.comment %}
+                            {{ fixtures.comment }}
+                        {% else %}
+                            <form type="text" method="post" name="comment" action="{% url 'fixtures:comment' fixtures.id %}">
+                                {% csrf_token %}
+                                    <textarea name="comment"></textarea>
+                                <input type="submit" value="send"/>
+                            </form>
+                        {% endif %}
                     </td>
                     </tr>
 
