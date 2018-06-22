@@ -19,7 +19,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username,password=raw_password)
             login(request,user)
-            return redirect('home')
+            return redirect('/fixtures/list')
     else:
         form = UserCreationForm()
     return render(request,'signup.html',{'form':form})
@@ -58,7 +58,7 @@ def borrow(request,fixtures_id):
                       )
 
 @login_required
-def back(request,fixtures_id):
+def back(request,fixtures_id):#other people can not return!!!
     try:
         fixtures = Goods.objects.get(pk=fixtures_id)
     except Goods.DoesNotExist:

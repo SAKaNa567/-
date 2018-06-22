@@ -7,12 +7,15 @@
                     <tr><td>{{ fixtures.id }}</td>   <td>{{ fixtures.goods }}</td>  <td>{{ fixtures.category }}</td> <td>{{ fixtures.user }}</td>
                         <td>{{ fixtures.pub_date }}</td>
                     <td>
-
                         {% if fixtures.status %}
                             <!--<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>貸出中-->
                         <form action="{% url 'fixtures:back' fixtures.id %}" method="post">
                             {% csrf_token %}
-                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span><input type="submit" value="返す"/>
+                                    {% if fixtures.user == user %}
+                                        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span><input type="submit" value="返す"/>
+                                    {% else %}
+                                        <p>貸し出し中</p>
+                                    {% endif %}
                         </form>
                         {% else %}
                         <form action="{% url 'fixtures:borrow' fixtures.id %}" method="post">
