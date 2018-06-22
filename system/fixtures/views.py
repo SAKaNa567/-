@@ -8,6 +8,7 @@ from .models import Goods
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 # you need this function.
 def signup(request):
@@ -29,12 +30,17 @@ def signup(request):
 def list(request):
     try:
         fixtures_list = Goods.objects.all()
+        paginator = Paginator(fixtures_list,10)
+        # show 10 fixtures per page
+        page = request.GET.get('page')
+        fixtures = paginator.get_page(page)
     except Goods.DoesNotExist:
         raise Http404("Fixtures does not exist")
     else:
         return render(request,
                       'choose.html',
-                      {'fixtures_list':fixtures_list}
+                      {'fixtures_list':fixtures_list,
+                       'fixtures':fixtures}
                       )
 
 @login_required

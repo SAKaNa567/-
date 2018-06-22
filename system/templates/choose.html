@@ -3,35 +3,35 @@
 {% block content %}
     <table class="table">
         <tr> <th>#</th> <th>備品名</th>    <th>カテゴリー名</th> <th>ユーザ名</th>  <th>貸し出し開始時間</th> <th>貸し出し状況</th> <th>コメント</th></tr>
-                {% for fixtures in fixtures_list %}
-                    <tr><td>{{ fixtures.id }}</td>   <td>{{ fixtures.goods }}</td>  <td>{{ fixtures.category }}</td>
+                {% for fixture in fixtures %}
+                    <tr><td>{{ fixture.id }}</td>   <td>{{ fixture.goods }}</td>  <td>{{ fixture.category }}</td>
                         <td>
-                            {% if fixtures.user == None %}
+                            {% if fixture.user == None %}
                                 --------
                             {% else %}
-                                {{ fixtures.user }}
+                                {{ fixture.user }}
                             {% endif %}
                         </td>
                         <td>
-                            {% if fixtures.pub_date == None %}
+                            {% if fixture.pub_date == None %}
                                 --------
                             {% else %}
-                                {{ fixtures.pub_date }}
+                                {{ fixture.pub_date }}
                             {% endif %}
                         </td>
                     <td>
-                        {% if fixtures.status %}
+                        {% if fixture.status %}
                             <!--<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>貸出中-->
-                        <form action="{% url 'fixtures:back' fixtures.id %}" method="post">
+                        <form action="{% url 'fixtures:back' fixture.id %}" method="post">
                             {% csrf_token %}
-                                    {% if fixtures.user == user %}
+                                    {% if fixture.user == user %}
                                         <span class="glyphicon glyphicon-import" aria-hidden="true"></span><input class="btn btn-info" type="submit" value="返す"/>
                                     {% else %}
                                         <span class="glyphicon glyphicon-check">貸し出し中</span>
                                     {% endif %}
                         </form>
                         {% else %}
-                        <form action="{% url 'fixtures:borrow' fixtures.id %}" method="post">
+                        <form action="{% url 'fixtures:borrow' fixture.id %}" method="post">
                             {% csrf_token %}
                             <!--<input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id}}"/>-->
                             <span class="glyphicon glyphicon-export" aria-hidden="true"></span><input class="btn btn-success" type="submit" value="借りる"/>
@@ -40,10 +40,10 @@
 
                     </td>
                     <td>
-                        {% if fixtures.comment %}
-                            {{ fixtures.comment }}
+                        {% if fixture.comment %}
+                            {{ fixture.comment }}
                         {% else %}
-                            <form type="text" method="post" name="comment" action="{% url 'fixtures:comment' fixtures.id %}">
+                            <form type="text" method="post" name="comment" action="{% url 'fixtures:comment' fixture.id %}">
                                 {% csrf_token %}
                                     <textarea name="comment"></textarea>
                                 <input type="submit" value="send"/>
@@ -54,4 +54,23 @@
 
                 {% endfor %}
     </table>
+
+
+    <div class="pagination">
+    <span class="step-links">
+        {% if fixtures.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ fixtures.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ fixtures.number }} of {{ fixtures.paginator.num_pages }}.
+        </span>
+
+        {% if fixtures.has_next %}
+            <a href="?page={{ fixtures.next_page_number }}">next</a>
+            <a href="?page={{ fixtures.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+    </div>
 {% endblock %}
