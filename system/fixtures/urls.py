@@ -4,6 +4,7 @@ from django.urls import path
 from fixtures import views as fixtures_views
 app_name = 'fixtures'
 urlpatterns = [
-    path('home/',fixtures_views.home,name='home'),
-    path('<int:fixtures_id>/choose/',fixtures_views.choose,name='choose')
+    path('list/',fixtures_views.list,name='list'),
+    path('<int:fixtures_id>/borrow/',fixtures_views.borrow,name='borrow'),
+    path('<int:fixtures_id>/back',fixtures_views.back,name='back'),
 ]

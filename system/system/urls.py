@@ -18,7 +18,7 @@ from django.urls import path,include
 from django.contrib.auth import views as auth_views
 from fixtures import views as fixtures_views
 urlpatterns = [
-    path('',include('fixtures.urls')),
+    path('fixtures/',include('fixtures.urls')),
     path('admin/', admin.site.urls),
     path('login/',auth_views.login,{'template_name':'login.html'},name='login'),
     path('logout/',auth_views.logout,{'next_page':'login'},name='logout'),

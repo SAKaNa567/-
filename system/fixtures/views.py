@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 # Create your views here.
 from .models import Goods
+from django.contrib.auth.models import User
+
 # you need this function.
 def signup(request):
     if request.method == 'POST':
@@ -21,14 +23,8 @@ def signup(request):
     return render(request,'signup.html',{'form':form})
 
 
-
 @login_required
-def home(request):
-    return render(request, 'home.html')
-
-
-@login_required
-def choose(request,fixtures_id):
+def list(request):
     try:
         fixtures_list = Goods.objects.all()
     except Goods.DoesNotExist:
@@ -38,3 +34,36 @@ def choose(request,fixtures_id):
                       'choose.html',
                       {'fixtures_list':fixtures_list}
                       )
+
+@login_required
+def home(request):
+    return render(request,home.html)
+
+@login_required
+def borrow(request,fixtures_id):
+    try:
+        fixtures = Goods.objects.get(pk=fixtures_id)
+    except Goods.DoesNotExist:
+        raise Http404("Goods does not exist")
+    else:
+        fixtures.user = User.objects.get(username=request.user)
+        fixtures.status = True
+        fixtures.save()
+        return render(request,
+                      'borrow.html',
+                      {'fixtures_name':fixtures}
+                      )
+
+@login_required
+def back(request,fixtures_id):
+    try:
+        fixtures = Goods.objects.get(pk=fixtures_id)
+    except Goods.DoesNotExist:
+        raise Http404("Goods does not exist")
+    else:
+        fixtures.user = None
+        fixtures.status = False
+        fixtures.save()
+        return render(request,
+                      'back.html',
+                      {'fixtures_name':fixtures.goods})
