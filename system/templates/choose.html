@@ -56,21 +56,32 @@
     </table>
 
 
-    <div class="pagination">
-    <span class="step-links">
-        {% if fixtures.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ fixtures.previous_page_number }}">previous</a>
-        {% endif %}
+   <div class="paginations" >
+   <span class="step-links">
 
-        <span class="current">
-            Page {{ fixtures.number }} of {{ fixtures.paginator.num_pages }}.
-        </span>
+       <nav aria-label="Page navigation example">
+           <ul class="pagination justify-content-center">
+               {% if fixtures.has_previous %}
+                   <li class="page-item"><a href="?page=1">&laquo; first</a></li>
+                   <!-- Previous page -->
+                   <li class="page-item"><a href="?page={{ fixtures.previous_page_number }}">{{ fixtures.number|add:-1 }}</a></li>
+               {% endif %}
 
-        {% if fixtures.has_next %}
-            <a href="?page={{ fixtures.next_page_number }}">next</a>
-            <a href="?page={{ fixtures.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
-    </span>
-    </div>
+               <!-- Crrent page -->
+               <li class="page-item">
+                   <span class="current">
+                       {{ fixtures.number }}
+                   </span>
+               </li>
+
+               {% if fixtures.has_next %}
+                   <!-- Next page -->
+                   <li class="page-item"><a href="?page={{ fixtures.next_page_number }}">{{ fixtures.number|add:1 }}</a></li>
+
+                   <li class="page-item"><a href="?page={{ fixtures.paginator.num_pages }}">last &raquo;</a></li>
+               {% endif %}
+           </ul>
+       </nav>
+   </span>
+   </div>
 {% endblock %}
