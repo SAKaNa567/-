@@ -51,23 +51,19 @@
   </style>
   <body>
     <header>
-      <div>
-        <h1>Fixtures management system</h1>
+      <nav class="navbar navbar-light bg-light">
+        <span class="navbar-brand ml-0 h1">備品管理システム</span>
         <div align="right">
           {% if user.is_authenticated %}
-        <a href="{% url 'logout' %}">logout</a> ようこそ{{ user }}さん
-      {% else %}
-        <a  href="{% url 'login' %}">login</a> / <a href="{% url 'signup' %}">signup</a>
-      {% endif %}
+          <a href="{% url 'logout' %}">logout</a> ようこそ{{ user }}さん
+        {% else %}
+          <a  href="{% url 'login' %}">login</a> / <a href="{% url 'signup' %}">signup</a>
+        {% endif %}
         </div>
-
-      </div>
-        <hr>
+      </nav>
     </header>
-
       <div id="content">
         {% block content %}{% endblock %}
       </div>
-
   </body>
 </html>
