@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div align="center">
+{% if category_list %}
+    {% for category in category_list %}
+        <a href="?category={{ category }}">{{ category }}</a><br>
+    {% endfor %}
+{% endif %}
+{% if specifiedlists %}
+    {% for goods in specifiedlists %}
+        {{ goods }}<br>
+    {% endfor %}
+{% endif %}
+</div>
+{% endblock %}
