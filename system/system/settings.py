@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,7 @@ SECRET_KEY = '%h_8w&9yhgj_&^!-9i0#8=9k*=*(20u+6%&6y)tsb=@jilo3ht'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -119,14 +120,26 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 STATIC_ROOT = os.path.join(PROJECT_ROOT,'staticfiles')
 STATIC_URL = '/static/'
+
 
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT,'static'),
 )
+#
 STATICFILES_STORAGE='whitenoise.django.GzipManifestStaticFilesStorage'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = '/fixtures'
+
+#
+DATABASE_URL='postgres://prcxkanrbkamkp:60306d2f066d50bf50a58ed174e2f42588b6867ee4e3afd542023d03604b7d2f@ec2-54-243-40-26.compute-1.amazonaws.com:5432/d1s9t8qi3k2952'
+DEBUG = config('DEBUG', default=False, cast=bool)
+DATABASES = {
+    'default': dj_database_url.config(
+        default=config(DATABASE_URL)
+    )
+}
