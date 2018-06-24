@@ -2,12 +2,13 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login,authenticate
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404,HttpResponseRedirect
 # Create your views here.
 from .models import Goods
 from django.contrib.auth.models import User
+from fixtures.models import Category
 from django.utils import timezone
-
+from django.urls import reverse
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 # you need this function.
@@ -45,7 +46,7 @@ def list(request):
 
 @login_required
 def home(request):
-    return render(request,home.html)
+    return render(request,'home.html')
 
 @login_required
 def borrow(request,fixtures_id):
@@ -58,10 +59,7 @@ def borrow(request,fixtures_id):
         fixtures.status = True
         fixtures.pub_date = timezone.now()
         fixtures.save()
-        return render(request,
-                      'borrow.html',
-                      {'fixtures_name':fixtures}
-                      )
+        return HttpResponseRedirect(reverse('fixtures:list'))
 
 @login_required
 def back(request,fixtures_id):#other people can not return!!!
@@ -74,9 +72,7 @@ def back(request,fixtures_id):#other people can not return!!!
         fixtures.status = False
         fixtures.pub_date = None
         fixtures.save()
-        return render(request,
-                      'back.html',
-                      {'fixtures_name':fixtures.goods})
+        return HttpResponseRedirect(reverse('fixtures:list'))
 
 @login_required
 def comment(request,fixtures_id):
@@ -91,3 +87,28 @@ def comment(request,fixtures_id):
                       'comment.html',
                       {'fixtures_comment':fixtures.comment}
                       )
+
+@login_required
+def category_list(request):
+    if "category" in request.GET: # get Category by QueryParameter
+        category = request.GET.get("category")
+    else:                       # No queryParameter
+        try:
+            category_list=Category.objects.all()
+        except Category.DoesNotExist:
+            raise Http404("Category does not exist")
+        else:
+            return render(request,
+                          'category.html',
+                          {"category_list":category_list}
+                          )
+    try:
+        specifiedlists = Category.objects.get(name=category).goods_set.all()
+    except Category.DoesNotExist:
+        raise Http404("Category does not exist")
+    else:
+        return render(request,
+                      'category.html',
+                      {"specifiedlists":specifiedlists}
+                      )
+
